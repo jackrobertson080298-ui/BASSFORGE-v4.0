@@ -1,0 +1,32 @@
+#pragma once
+#include "PluginProcessor.h"
+class BassforgeEditor : public juce::AudioProcessorEditor {
+public:
+ explicit BassforgeEditor(BassforgeProcessor&);
+ void paint(juce::Graphics&) override;
+ void resized() override;
+private:
+ BassforgeProcessor& processor;
+ juce::ComboBox presets;
+ juce::Label title, subtitle;
+ juce::MidiKeyboardState keyboardState;
+ juce::MidiKeyboardComponent keyboard{keyboardState,juce::MidiKeyboardComponent::horizontalKeyboard};
+ std::array<juce::Slider,12> knobs;
+ std::array<juce::Label,12> labels;
+ std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>,12> attachments;
+ juce::ComboBox shape;
+ std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> shapeAttachment;
+ juce::TextButton synthTab{"SYNTH"}, fxTab{"FX RACK"};
+ juce::ToggleButton bypass{"BYPASS ALL FX"};
+ std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bypassAttach;
+ std::array<juce::Label,7> fxLabels;
+ std::array<juce::ToggleButton,7> fxEnabled;
+ std::array<juce::Slider,7> fxMix,fxAmount;
+ std::array<juce::TextButton,7> fxUp,fxDown;
+ std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>,7> fxEnabledAttach;
+ std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>,7> fxMixAttach,fxAmountAttach;
+ bool showFx=false;
+ void refreshFxLabels();
+ void updatePage();
+ JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BassforgeEditor)
+};
